@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "333391784193",
+    "project_id": "xiupeadome",
+    "storage_bucket": "xiupeadome.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:333391784193:android:62621f22a8565e4d5d9300",
+        "android_client_info": {
+          "package_name": "com.github.peaquyen.dome"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqi4RpjfTIV3bV5udwE3RUvGsEnRZbs8s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
