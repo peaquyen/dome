@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.peaquyen.dome.databinding.FragmentHomeBinding
 import com.github.peaquyen.dome.utils.adapter.TaskAdapter
@@ -63,6 +64,11 @@ class HomeFragment : Fragment(), ToDoDialogFragment.OnDialogNextBtnClickListener
                 ToDoDialogFragment.TAG
             )
 
+        }
+
+        // Logout
+        binding.logoutBtn.setOnClickListener {
+            logout()
         }
     }
 
@@ -160,6 +166,14 @@ class HomeFragment : Fragment(), ToDoDialogFragment.OnDialogNextBtnClickListener
             childFragmentManager,
             ToDoDialogFragment.TAG
         )
+    }
+
+
+    private fun logout() {
+        FirebaseAuth.getInstance().signOut()
+        // Chuyển hướng người dùng về màn hình đăng nhập
+        val action = HomeFragmentDirections.actionHomeFragmentToSignInFragment()
+        findNavController().navigate(action)
     }
 
 }
