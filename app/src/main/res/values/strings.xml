@@ -6,4 +6,13 @@
     <string name="enter_your_pass">Enter Your Password .....</string>
     <string name="re_enter_your_pass">Re-enter Your Password .....</string>
     <string name="type_your_task">Type your task .....</string>
+
+    <!-- TD Items -->
+    <string name="task_title">Task Title</string>
+    <string name="type_task_title">Type task title</string>
+    <string name="task_description">Task Description</string>
+    <string name="type_task_description">Type task description</string>
+    <string name="task_done">Task Done</string>
+
 </resources>
+

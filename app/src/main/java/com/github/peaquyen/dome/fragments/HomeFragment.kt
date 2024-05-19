@@ -37,7 +37,7 @@ class HomeFragment : Fragment(), ToDoDialogFragment.OnDialogNextBtnClickListener
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
@@ -135,7 +135,7 @@ class HomeFragment : Fragment(), ToDoDialogFragment.OnDialogNextBtnClickListener
 
     override fun updateTask(toDoData: ToDoData, todoEdit: TextInputEditText) {
         val map = HashMap<String, Any>()
-        map[toDoData.taskId] = toDoData.task
+        map[toDoData.taskId] = toDoData.taskTitle
         database.updateChildren(map).addOnCompleteListener {
             if (it.isSuccessful) {
                 Toast.makeText(context, "Updated Successfully", Toast.LENGTH_SHORT).show()
@@ -160,7 +160,7 @@ class HomeFragment : Fragment(), ToDoDialogFragment.OnDialogNextBtnClickListener
         if (frag != null)
             childFragmentManager.beginTransaction().remove(frag!!).commit()
 
-        frag = ToDoDialogFragment.newInstance(toDoData.taskId, toDoData.task)
+        frag = ToDoDialogFragment.newInstance(toDoData.taskId, toDoData.taskTitle)
         frag!!.setListener(this)
         frag!!.show(
             childFragmentManager,
