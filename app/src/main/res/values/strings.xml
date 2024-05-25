@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">KotlinToDoPractice</string>
+    <string name="app_name">do me</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="enter_your_email">Enter Your Email .....</string>
