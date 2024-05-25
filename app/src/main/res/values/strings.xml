@@ -13,6 +13,12 @@
     <string name="task_description">Task Description</string>
     <string name="type_task_description">Type task description</string>
     <string name="task_done">Task Done</string>
+    <string name="start_date_time">Start Date Time</string>
+    <string name="type_start_date_time">Type start date time</string>
+    <string name="end_date_time">End Date Time</string>
+    <string name="type_end_date_time">Type end date time</string>
+    <string name="donecheckbox">Done</string>
+
 
 </resources>
 

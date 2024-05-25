@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Primary colors -->
+    <color name="purple_200">#BB86FC</color>
+    <color name="purple_500">#6200EE</color>
+    <color name="purple_700">#3700B3</color>
 
-    <color name="text_color">#21108A</color>
-    <color name="secondary_color">#D5CEFF</color>
+    <!-- Accent colors -->
+    <color name="teal_200">#03DAC5</color>
+    <color name="teal_700">#018786</color>
+
+    <!-- Basic colors -->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+
+    <!-- Theme specific colors -->
+    <color name="background">#FFFFFF</color>  <!-- Light background -->
+    <color name="surface">#FFFFFF</color>  <!-- Surface elements -->
+    <color name="primaryText">#000000</color>  <!-- Primary text color -->
+    <color name="secondaryText">#6200EE</color>  <!-- Secondary text color -->
+    <color name="accent">#6200EE</color>  <!-- Accent color (purple) -->
+    <color name="error">#B00020</color>  <!-- Error color (red) -->
+    <color name="onPrimary">#FFFFFF</color>  <!-- Text color on primary elements -->
+
+    <!-- Custom colors -->
+    <color name="text_color">#000000</color>  <!-- Main text color -->
+    <color name="secondary_color">#6200EE</color>  <!-- Secondary elements color -->
 </resources>

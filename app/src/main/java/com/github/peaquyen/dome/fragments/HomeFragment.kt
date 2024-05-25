@@ -51,19 +51,12 @@ class HomeFragment : Fragment(), ToDoDialogFragment.OnDialogNextBtnClickListener
         //get data from firebase
         getTaskFromFirebase()
 
-
         binding.addTaskBtn.setOnClickListener {
-
             if (frag != null)
                 childFragmentManager.beginTransaction().remove(frag!!).commit()
             frag = ToDoDialogFragment()
             frag!!.setListener(this)
-
-            frag!!.show(
-                childFragmentManager,
-                ToDoDialogFragment.TAG
-            )
-
+            frag!!.show(childFragmentManager, ToDoDialogFragment.TAG)
         }
 
         // Logout
@@ -75,37 +68,31 @@ class HomeFragment : Fragment(), ToDoDialogFragment.OnDialogNextBtnClickListener
     private fun getTaskFromFirebase() {
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-
                 toDoItemList.clear()
                 for (taskSnapshot in snapshot.children) {
-                    val todoTask =
-                        taskSnapshot.key?.let { ToDoData(it, taskSnapshot.value.toString()) }
-
-                    if (todoTask != null) {
-                        toDoItemList.add(todoTask)
-                    }
-
+                    val taskId = taskSnapshot.key ?: continue
+                    val taskTitle = taskSnapshot.child("taskTitle").getValue(String::class.java) ?: ""
+                    val taskDescription = taskSnapshot.child("taskDescription").getValue(String::class.java) ?: ""
+                    val startDateTime = taskSnapshot.child("startDateTime").getValue(Long::class.java) ?: 0L
+                    val endDateTime = taskSnapshot.child("endDateTime").getValue(Long::class.java) ?: 0L
+                    val done = taskSnapshot.child("done").getValue(Boolean::class.java) ?: false
+                    val todoTask = ToDoData(taskId, taskTitle, taskDescription, startDateTime, endDateTime, done)
+                    toDoItemList.add(todoTask)
                 }
-                Log.d(TAG, "onDataChange: " + toDoItemList)
+                Log.d(TAG, "onDataChange: $toDoItemList")
                 taskAdapter.notifyDataSetChanged()
-
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show()
             }
-
-
         })
     }
 
     private fun init() {
-
         auth = FirebaseAuth.getInstance()
         authId = auth.currentUser!!.uid
-        database = Firebase.database.reference.child("Tasks")
-            .child(authId)
-
+        database = Firebase.database.reference.child("Tasks").child(authId)
 
         binding.mainRecyclerView.setHasFixedSize(true)
         binding.mainRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -116,27 +103,29 @@ class HomeFragment : Fragment(), ToDoDialogFragment.OnDialogNextBtnClickListener
         binding.mainRecyclerView.adapter = taskAdapter
     }
 
-    override fun saveTask(todoTask: String, todoEdit: TextInputEditText) {
-
-        database
-            .push().setValue(todoTask)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    Toast.makeText(context, "Task Added Successfully", Toast.LENGTH_SHORT).show()
-                    todoEdit.text = null
-
-                } else {
-                    Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT).show()
-                }
+    override fun saveTask(taskTitle: String, taskDescription: String, startDateTime: Long, endDateTime: Long, done: Boolean, todoEdit: TextInputEditText) {
+        val newTaskRef = database.push()
+        val task = ToDoData(newTaskRef.key!!, taskTitle, taskDescription, startDateTime, endDateTime, done)
+        newTaskRef.setValue(task).addOnCompleteListener {
+            if (it.isSuccessful) {
+                Toast.makeText(context, "Task Added Successfully", Toast.LENGTH_SHORT).show()
+                todoEdit.text = null
+            } else {
+                Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT).show()
             }
+        }
         frag!!.dismiss()
-
     }
 
     override fun updateTask(toDoData: ToDoData, todoEdit: TextInputEditText) {
-        val map = HashMap<String, Any>()
-        map[toDoData.taskId] = toDoData.taskTitle
-        database.updateChildren(map).addOnCompleteListener {
+        val map = mapOf(
+            "taskTitle" to toDoData.taskTitle,
+            "taskDescription" to toDoData.taskDescription,
+            "startDateTime" to toDoData.startDateTime,
+            "endDateTime" to toDoData.endDateTime,
+            "done" to toDoData.done
+        )
+        database.child(toDoData.taskId).updateChildren(map).addOnCompleteListener {
             if (it.isSuccessful) {
                 Toast.makeText(context, "Updated Successfully", Toast.LENGTH_SHORT).show()
             } else {
@@ -160,20 +149,32 @@ class HomeFragment : Fragment(), ToDoDialogFragment.OnDialogNextBtnClickListener
         if (frag != null)
             childFragmentManager.beginTransaction().remove(frag!!).commit()
 
-        frag = ToDoDialogFragment.newInstance(toDoData.taskId, toDoData.taskTitle)
-        frag!!.setListener(this)
-        frag!!.show(
-            childFragmentManager,
-            ToDoDialogFragment.TAG
+        frag = ToDoDialogFragment.newInstance(
+            toDoData.taskId,
+            toDoData.taskTitle,
+            toDoData.taskDescription,
+            toDoData.startDateTime,
+            toDoData.endDateTime,
+            toDoData.done
         )
+        frag!!.setListener(this)
+        frag!!.show(childFragmentManager, ToDoDialogFragment.TAG)
     }
 
+    override fun onTaskStatusChanged(toDoData: ToDoData, position: Int) {
+        val map = mapOf("done" to toDoData.done)
+        database.child(toDoData.taskId).updateChildren(map).addOnCompleteListener {
+            if (it.isSuccessful) {
+                Toast.makeText(context, "Task Status Updated", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     private fun logout() {
         FirebaseAuth.getInstance().signOut()
-        // Chuyển hướng người dùng về màn hình đăng nhập
         val action = HomeFragmentDirections.actionHomeFragmentToSignInFragment()
         findNavController().navigate(action)
     }
-
 }
